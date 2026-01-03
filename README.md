@@ -84,3 +84,14 @@ StudyTracker/
     │   ├── App.css                       # Styling
     │   └── index.js
     └── package.json
+
+---
+
+##🔌 API Endpoints 
+The backend exposes the following RESTful endpoints:
+
+### **Semesters**
+*GET /api/semesters - Get all semesters.
+*POST /api/semesters - Create a new semester.
+*PUT /api/semesters/{id} - Update a semester (e.g., Archive/Unarchive).
+*DELETE /api/semesters/{id} - Delete a semester.
