@@ -1,0 +1,15 @@
+# React / Node
+node_modules/
+build/
+.env
+
+# Java / Maven
+target/
+*.class
+.mvn/
+*.jar
+*.war
+.idea/
+*.iml
+.vscode/
+.DS_Store
