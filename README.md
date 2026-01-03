@@ -92,7 +92,16 @@ StudyTracker/
 The backend exposes the following RESTful endpoints:
 
 ### **Semesters**
-*GET /api/semesters - Get all semesters.
-*POST /api/semesters - Create a new semester.
-*PUT /api/semesters/{id} - Update a semester (e.g., Archive/Unarchive).
-*DELETE /api/semesters/{id} - Delete a semester.
+* GET /api/semesters - Get all semesters.
+* OST /api/semesters - Create a new semester.
+* PUT /api/semesters/{id} - Update a semester (e.g., Archive/Unarchive).
+* DELETE /api/semesters/{id} - Delete a semester.
+
+### **Subjects**
+* GET /api/subjects?semesterId={id} - Get subjects for a specific semester.
+* POST /api/subjects - Add a subject.
+* DELETE /api/subjects/{id} - Delete a subject.
+
+### **Sessions**
+* GET /api/sessions?semesterId={id} - Get study history for a semester.
+* POST /api/sessions - Log a new study session.
