@@ -100,6 +100,7 @@ StudyTracker/
     │   └── index.js
     └── package.json
 ---
+```
 
 ## 🔌 API Endpoints 
 The backend exposes the following RESTful endpoints:
