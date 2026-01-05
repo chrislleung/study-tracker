@@ -473,9 +473,20 @@ function App() {
       setEditingGradeType(null);
   };
 
-  const handleAddAssessment = async () => { 
+const handleAddAssessment = async () => { 
       if (!newAssessment.name || !newAssessment.date || !selectedSubjectId || !newAssessment.type) return alert("Please select a Type."); 
-      await fetch('http://localhost:8080/api/assessments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...newAssessment, subjectId: selectedSubjectId }), }); 
+      
+      // FIX: Parse and format grade to 1 decimal place to match Calculator behavior
+      const gradeVal = parseFloat(newAssessment.grade);
+      const formattedGrade = !isNaN(gradeVal) ? gradeVal.toFixed(1) : "0.0";
+
+      await fetch('http://localhost:8080/api/assessments', { 
+          method: 'POST', 
+          headers: { 'Content-Type': 'application/json' }, 
+          // Use formattedGrade instead of raw newAssessment.grade
+          body: JSON.stringify({ ...newAssessment, grade: formattedGrade, subjectId: selectedSubjectId }), 
+      }); 
+      
       setNewAssessment({ name: "", type: assignmentTypes[0] || "", date: "", grade: "" }); 
       fetchAssessments(selectedSubjectId); 
       setShowAddAssessment(false); 
@@ -639,7 +650,7 @@ function App() {
                           <>
                             {/* 1. CONFIGURATION */}
                             <div className="calc-card">
-                                <h3>1. Assignment Types & Weights</h3>
+                                <h3>Assignment Types & Weights</h3>
                                 <div className="add-type-row"><input placeholder="New Category (e.g. Lab)" value={newTypeName} onChange={e => setNewTypeName(e.target.value)} /><button onClick={handleAddType} className="btn-small">Add</button></div>
                                 <div className="weights-grid">
                                     {assignmentTypes.map(type => (
@@ -671,7 +682,7 @@ function App() {
 
                             {/* 2. ENTER GRADES */}
                             <div className="calc-card">
-                                <h3>2. Enter Grades</h3>
+                                <h3>Grades</h3>
                                 <div className="sidebar-form row-form">
                                     <input placeholder="Name" value={newGradeEntry.name} onChange={e => setNewGradeEntry({...newGradeEntry, name: e.target.value})} />
                                     <input placeholder="Score" type="number" style={{width:'60px'}} value={newGradeEntry.score} onChange={e => setNewGradeEntry({...newGradeEntry, score: e.target.value})} />
@@ -772,7 +783,7 @@ function App() {
                                             </div>
                                         ) : (
                                             <div key={`tracker-${assess.id}`} className="grade-item tracker-grade">
-                                                <span>{assess.type}: {assess.name} <span style={{fontSize:'0.8rem', opacity:0.7}}>(Tracker)</span></span>
+                                                <span>{assess.name} <span style={{fontSize:'0.8rem', opacity:0.7}}>({assess.type})</span></span>
                                                 <span>{assess.grade || 0}/100</span>
                                                 <button onClick={()=>startEditingGradeList(assess, 'tracker')} className="x-btn" style={{color:'#aaa', justifySelf:'end'}}>⋮</button>
                                             </div>
@@ -783,7 +794,7 @@ function App() {
 
                             {/* 3. RESULTS */}
                             <div className="calc-card result-card">
-                                <h3>3. Predictive Engine</h3>
+                                <h3>Predictive Engine</h3>
                                 <div className="prediction-input"><label>Desired Grade:</label><input type="number" value={targetGrade} onChange={e => setTargetGrade(e.target.value)} /><span>%</span></div>
                                 {calculationResult && (
                                     <div className="results-display">
@@ -796,7 +807,7 @@ function App() {
                                         )}
                                         <div style={{margin:'15px 0', borderTop:'1px solid rgba(255,255,255,0.1)'}}></div>
                                         <div className="res-row"><span>Required Score (Remaining {calculationResult.remainingWeight}%):</span><span className="highlight" style={{color: calculationResult.requiredScore > 100 ? '#ff4d4d' : '#61dafb'}}>{calculationResult.requiredScore}%</span></div>
-                                        <div className="study-prediction"><h4>Time Prediction (Next Exam)</h4>{calculationResult.hasRegression ? (<p>Estimated study time needed:<br/><span className="giant-text">{calculationResult.predictedHours} Hours</span></p>) : (<p style={{opacity:0.7}}>Not enough data to predict time.</p>)}</div>
+                                        <div className="study-prediction"><h4>Time Prediction</h4>{calculationResult.hasRegression ? (<p>Estimated study time needed:<br/><span className="giant-text">{calculationResult.predictedHours} Hours</span></p>) : (<p style={{opacity:0.7}}>Not enough data to predict time.</p>)}</div>
                                     </div>
                                 )}
                             </div>

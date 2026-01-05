@@ -1,16 +1,30 @@
 # 📚 Study Tracker
 
-A full-stack web application designed to help students track their study hours across multiple semesters and subjects. Built with a **Java Spring Boot** backend and a **React.js** frontend, stored in **MongoDB**.
+A full-stack web application designed to help students track their study hours, analyze their performance, and predict future grades. Built with a **Java Spring Boot** backend and a **React.js** frontend, stored in **MongoDB**.
 
 ## ✨ Features
 
-* **Semester Management:** Create distinct tabs for different semesters to organize your academic year.
-* **Archiving System:** Archive old semesters to keep the workspace clean without deleting historical data.
-* **Class Management:** Add and delete classes (subjects) specific to the selected semester.
-* **Study Timer:** Real-time stopwatch to track study sessions.
-* **Session History:** View a log of start times, end times, and durations for every session.
-* **Analytics Sidebar:** Real-time summary showing total study time per subject and the semester total.
-* **Data Persistence:** All data is securely stored in a MongoDB database.
+### ⏱️ Study Tracking
+* **Real-time Timer:** Stopwatch to track live study sessions for specific classes.
+* **Session History:** Detailed logs of start times, end times, and durations.
+* **Subject Totals:** At-a-glance view of total hours dedicated to each subject.
+
+### 📊 Analytics Dashboard
+* **Data Visualization:** Interactive graphs built with Recharts.
+* **Correlation Analysis:** Scatter charts visualizing the relationship between **Time Studied** and **Grades Achieved**.
+* **Efficiency Metrics:** Bar charts displaying "Points per Hour" to help identify which subjects you are most efficient in.
+* **KPIs:** Key Performance Indicators like Average Efficiency.
+
+### 🧮 Predictive Grade Calculator
+* **Goal Setting:** Enter a target grade (e.g., 90%) to calculate exactly what score you need on remaining exams.
+* **Time Prediction Engine:** Uses linear regression on your past data to predict **how many hours** you need to study to achieve your target score.
+* **Custom Scenarios:** Add hypothetical grades to see how they impact your overall average (Normalized and Absolute).
+* **Dynamic Configuration:** Create custom assignment types (e.g., Labs, Quizzes, Projects) and assign specific weights.
+
+### 🗂️ Class & Semester Management
+* **Semester Tabs:** Organize classes by semester with Archive/Unarchive functionality.
+* **Customizable Classes:** Add/Delete subjects and configure unique grading scales for each.
+* **Assignment Sync:** Assignments added in the Calculator automatically sync to your Tracker.
 
 ## 🛠️ Tech Stack
 
@@ -22,6 +36,7 @@ A full-stack web application designed to help students track their study hours a
 
 ### **Frontend**
 * **React.js** (Hooks, Functional Components)
+* **Recharts** (Data Visualization & Graphs)
 * **CSS3** (Flexbox, Grid, Animations)
 
 ---
@@ -74,18 +89,16 @@ StudyTracker/
 │   ├── src/main/java/com/example/studytracker/
 │   │   ├── StudyTrackerApplication.java  # Entry Point
 │   │   ├── controller/                   # REST Controllers (API Endpoints)
-│   │   ├── model/                        # MongoDB Documents (Semester, Subject, Session)
+│   │   ├── model/                        # MongoDB Documents (Subject, Session, GradeEntry)
 │   │   └── repository/                   # Data Access Layer
 │   └── pom.xml
 │
 └── frontend/
     ├── src/
-    │   ├── App.js                        # Main UI Logic
+    │   ├── App.js                        # Main UI Logic & Dashboard
     │   ├── App.css                       # Styling
     │   └── index.js
     └── package.json
-
-```
 ---
 
 ## 🔌 API Endpoints 
@@ -100,8 +113,11 @@ The backend exposes the following RESTful endpoints:
 ### **Subjects**
 * GET /api/subjects?semesterId={id} - Get subjects for a specific semester.
 * POST /api/subjects - Add a subject.
+* PUT /api/subjects/{id}/config - Update grading weights and assignment types.
 * DELETE /api/subjects/{id} - Delete a subject.
 
 ### **Sessions**
 * GET /api/sessions?semesterId={id} - Get study history for a semester.
 * POST /api/sessions - Log a new study session.
+* POST /api/assessments - Add a graded assessment.
+* GET /api/grades - Get grade entries for the calculator.

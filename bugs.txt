@@ -1,0 +1,2 @@
+minor bugs
+- when adding an assignment on the tracker page, score saved without decimal, when added on the calculator page, it is saved with a decimal. 
