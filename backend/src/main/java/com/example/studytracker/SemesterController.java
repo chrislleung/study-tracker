@@ -24,13 +24,17 @@ public class SemesterController {
         return repository.save(semester);
     }
 
-    // New Endpoint to update (Archive/Unarchive)
+    // UPDATED: Now handles Name and Archived status
     @PutMapping("/{id}")
     public Semester updateSemester(@PathVariable String id, @RequestBody Semester updatedSemester) {
         return repository.findById(id)
             .map(semester -> {
+                // Only update name if it's sent
+                if (updatedSemester.getName() != null && !updatedSemester.getName().isEmpty()) {
+                    semester.setName(updatedSemester.getName());
+                }
+                // Always update archived status (boolean defaults to false if missing, so handle carefully in frontend)
                 semester.setArchived(updatedSemester.isArchived());
-                // You could update name here too if desired
                 return repository.save(semester);
             })
             .orElseThrow(() -> new RuntimeException("Semester not found"));
