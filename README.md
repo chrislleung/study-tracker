@@ -2,6 +2,8 @@
 
 A full-stack web application designed to help students track their study hours, analyze their performance, and predict future grades. Built with a **Java Spring Boot** backend and a **React.js** frontend, stored in **MongoDB**.
 
+[App Version](https://github.com/chrislleung/Logit-Study-Tracker) 
+
 ## ✨ Features
 
 ### ⏱️ Study Tracking
